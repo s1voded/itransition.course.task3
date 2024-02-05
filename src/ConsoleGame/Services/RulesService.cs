@@ -1,13 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleGame.Service
 {
-    internal class RulesService
+    public class RulesService
     {
+        const byte minGameMoves = 3;
+
+        public bool ValidateMoves(string[] gameMoves, out string msg)
+        {
+            var sbMsg = new StringBuilder();
+            var validateResult = true;
+
+            if (gameMoves.Distinct().Count() != gameMoves.Length) sbMsg.AppendLine("All game moves must be unique;");
+            if (gameMoves.Length % 2 == 0) sbMsg.AppendLine("The number of game moves must be odd;");
+            if (gameMoves.Length < minGameMoves) sbMsg.AppendLine("The number of game moves must be >=").Append(minGameMoves).Append(';');
+
+            if (sbMsg.Length > 0)
+            {
+                sbMsg.Insert(0,"Invalid input data:\n");
+                validateResult = false;
+            }
+
+            msg = sbMsg.ToString();
+            return validateResult;
+        }
+
         public Dictionary<string, Dictionary<string, object>> GetRules(string[] allMoves)
         {
             var movesRule = new Dictionary<string, Dictionary<string, object>>();

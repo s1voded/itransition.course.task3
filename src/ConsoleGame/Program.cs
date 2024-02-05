@@ -1,18 +1,23 @@
-﻿using ConsoleGame.Service;
+﻿using ConsoleGame.Core;
+using ConsoleGame.Service;
 using ConsoleGame.Services;
-using ConsoleTables;
+using Microsoft.Extensions.DependencyInjection;
 
-ConsoleOutputService.ValidateArgs(args);
 
-var key = CryptoService.GenerateKey();
+var services = CreateServices();
 
-Console.WriteLine("KEY: " + key);
-Console.WriteLine("HMAC: " + CryptoService.GenerateHMAC("stone", key));
+var game = services.GetRequiredService<GameCore>();
+game.Play(args);
 
-var rulesService = new RulesService();
-var moveRules = rulesService.GetRules(args);
+ static ServiceProvider CreateServices()
+{
+    var serviceProvider = new ServiceCollection()
+        .AddScoped<GameCore>()
+        .AddScoped<RulesService>()
+        .AddScoped<CryptoService>()
+        .AddScoped<UIService>()
+        .AddScoped<HelpTableService>()
+        .BuildServiceProvider();
 
-HelpTableService.ShowTable(moveRules);
-
-var result = moveRules["a"]["c"];
-Console.WriteLine(result);
+    return serviceProvider;
+}

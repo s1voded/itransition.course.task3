@@ -3,9 +3,9 @@ using System.Text;
 
 namespace ConsoleGame.Service
 {
-    internal class CryptoService
+    public class CryptoService
     {
-        public static string GenerateKey()
+        public string GenerateKey()
         {
             const byte bufferSize = 32;
             using (var generator = RandomNumberGenerator.Create())
@@ -17,7 +17,7 @@ namespace ConsoleGame.Service
             }
         }
 
-        public static string GenerateHMAC(string text, string key)
+        public string GenerateHMAC(string text, string key)
         {
             key = key ?? "";
 
