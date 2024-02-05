@@ -1,5 +1,8 @@
 ﻿using ConsoleGame.Service;
+using ConsoleGame.Services;
 using ConsoleTables;
+
+ConsoleOutputService.ValidateArgs(args);
 
 var key = CryptoService.GenerateKey();
 
