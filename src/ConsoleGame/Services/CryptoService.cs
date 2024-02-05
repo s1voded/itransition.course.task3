@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace ConsoleGame.Services
+namespace ConsoleGame.Service
 {
     internal class CryptoService
     {
