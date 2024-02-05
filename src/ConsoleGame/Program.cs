@@ -11,10 +11,8 @@ Console.WriteLine("HMAC: " + CryptoService.GenerateHMAC("stone", key));
 
 var rulesService = new RulesService();
 var moveRules = rulesService.GetRules(args);
-var helpMoveRulesTable = ConsoleTable.FromDictionary(moveRules);
-helpMoveRulesTable.Options.EnableCount = false;
 
-Console.WriteLine(helpMoveRulesTable.ToString());
+HelpTableService.ShowTable(moveRules);
 
 var result = moveRules["a"]["c"];
 Console.WriteLine(result);
