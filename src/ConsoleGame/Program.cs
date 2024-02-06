@@ -6,9 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 var services = CreateServices();
 
+//start game
 services.GetRequiredService<GameCore>().Play(args);
 
- static ServiceProvider CreateServices()
+static ServiceProvider CreateServices()
 {
     var serviceProvider = new ServiceCollection()
         .AddScoped<GameCore>()

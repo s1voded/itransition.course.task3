@@ -2,14 +2,14 @@
 
 namespace ConsoleGame.Services
 {
-    public class ConsoleTableGeneratorService: ITableGenerator
+    public class ConsoleTableGeneratorService : ITableGenerator
     {
-        public string GenerateTable(Dictionary<string, Dictionary<string, object>> moveRules)
+        public string GenerateTable(Dictionary<string, Dictionary<string, object>> tableData)
         {
-            var helpMoveRulesTable = ConsoleTable.FromDictionary(moveRules);
-            helpMoveRulesTable.Options.EnableCount = false;
+            var table = ConsoleTable.FromDictionary(tableData);
+            table.Options.EnableCount = false;
 
-            return helpMoveRulesTable.ToString();
+            return table.ToStringAlternative();
         }
     }
 
