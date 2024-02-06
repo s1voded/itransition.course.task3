@@ -10,43 +10,43 @@ namespace ConsoleGame.Core
 {
     public class GameCore
     {
-        private RulesService _rulesService;
-        private CryptoService _cryptoService;
-        private UIService _uiService;
+        private IGameRules _rulesService;
+        private IHMACGenerator _hmacService;
+        private IMessageWriter _messageWriterService;
 
-        public GameCore(RulesService rulesService, CryptoService cryptoService, UIService uiService)
+        public GameCore(IGameRules rulesService, IHMACGenerator hmacService, IMessageWriter messageWriterService)
         {
             _rulesService = rulesService;
-            _cryptoService = cryptoService;
-            _uiService = uiService;
+            _hmacService = hmacService;
+            _messageWriterService = messageWriterService;
         }
 
         public void Play(string[] gameMoves)
         {
-            if(!_rulesService.ValidateMoves(gameMoves, out string msg)) _uiService.ShowMsg(msg);
-            else
+            if(_rulesService.ValidateArgs(gameMoves, out string errorMessage))
             {
                 var gameRules = _rulesService.GetRules(gameMoves);
 
                 var random = new Random();
                 var pc_move = gameMoves[random.Next(0, gameMoves.Length)];
-                var key = _cryptoService.GenerateKey();
-                var hmac = _cryptoService.GenerateHMAC(pc_move, key);
+                var key = _hmacService.GenerateKey();
+                var hmac = _hmacService.GenerateHMAC(pc_move, key);
 
-                _uiService.ShowMsg("HMAC: " + hmac);
-                _uiService.ShowGameMenu(gameMoves);
+                _messageWriterService.Write("HMAC: " + hmac);
+                var menu = _rulesService.GetMenu(gameMoves);
+                _messageWriterService.Write(menu);
 
                 var user_move = gameMoves[random.Next(0, gameMoves.Length)];
 
-                _uiService.ShowMsg("User move: " + user_move);
-                _uiService.ShowMsg("Computer move: " + pc_move);
+                _messageWriterService.Write("User move: " + user_move);
+                _messageWriterService.Write("Computer move: " + pc_move);
 
                 var sparingResult = gameRules[user_move][pc_move].ToString();
 
-                _uiService.ShowMsg(sparingResult);
-                _uiService.ShowMsg("HMAC key: " + key);
-
+                _messageWriterService.Write(sparingResult);
+                _messageWriterService.Write("HMAC key: " + key);
             }
+            else _messageWriterService.Write(errorMessage);
 
         }
 

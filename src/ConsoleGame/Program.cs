@@ -6,17 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 var services = CreateServices();
 
-var game = services.GetRequiredService<GameCore>();
-game.Play(args);
+services.GetRequiredService<GameCore>().Play(args);
 
  static ServiceProvider CreateServices()
 {
     var serviceProvider = new ServiceCollection()
         .AddScoped<GameCore>()
-        .AddScoped<RulesService>()
-        .AddScoped<CryptoService>()
-        .AddScoped<UIService>()
-        .AddScoped<HelpTableService>()
+        .AddScoped<IGameRules, OneMoveGameRulesService>()
+        .AddScoped<IHMACGenerator, SHA256HMACService>()
+        .AddScoped<IMessageWriter, ConsoleWriterService>()
+        .AddScoped<ITableGenerator, ConsoleTableGeneratorService>()
         .BuildServiceProvider();
 
     return serviceProvider;

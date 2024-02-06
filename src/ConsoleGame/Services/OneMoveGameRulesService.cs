@@ -3,11 +3,11 @@ using System.Text;
 
 namespace ConsoleGame.Service
 {
-    public class RulesService
+    public class OneMoveGameRulesService: IGameRules
     {
         const byte minGameMoves = 3;
 
-        public bool ValidateMoves(string[] gameMoves, out string msg)
+        public bool ValidateArgs(string[] gameMoves, out string errorMessage)
         {
             var sbMsg = new StringBuilder();
             var validateResult = true;
@@ -22,8 +22,24 @@ namespace ConsoleGame.Service
                 validateResult = false;
             }
 
-            msg = sbMsg.ToString();
+            errorMessage = sbMsg.ToString();
             return validateResult;
+        }
+
+        public string GetMenu(string[] gameMoves)
+        {
+            var separator = " - ";
+
+            var sbMenu = new StringBuilder("Available moves:\n");
+            foreach (var move in gameMoves)
+            {
+                var menuNumber = Array.IndexOf(gameMoves, move) + 1;
+                sbMenu.AppendLine(menuNumber + separator + move);
+            }
+            sbMenu.AppendLine(0 + separator + "exit");
+            sbMenu.AppendLine("?" + separator + "help");
+
+            return sbMenu.ToString();
         }
 
         public Dictionary<string, Dictionary<string, object>> GetRules(string[] allMoves)
@@ -64,5 +80,12 @@ namespace ConsoleGame.Service
 
             return moveRules;
         }
+    }
+
+    public interface IGameRules
+    {
+        bool ValidateArgs(string[] gameMoves, out string errorMessage);
+        string GetMenu(string[] gameMoves);
+        Dictionary<string, Dictionary<string, object>> GetRules(string[] allMoves);
     }
 }

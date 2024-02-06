@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ConsoleGame.Service
 {
-    public class CryptoService
+    public class SHA256HMACService: IHMACGenerator
     {
         public string GenerateKey()
         {
@@ -28,5 +28,11 @@ namespace ConsoleGame.Service
             }
 
         }
+    }
+
+    public interface IHMACGenerator
+    {
+        string GenerateKey();
+        string GenerateHMAC(string text, string key);
     }
 }
