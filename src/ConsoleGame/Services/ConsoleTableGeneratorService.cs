@@ -8,8 +8,9 @@ namespace ConsoleGame.Services
         {
             var table = ConsoleTable.FromDictionary(tableData);
             table.Options.EnableCount = false;
+            table.Columns[0] = "PC/User >";
 
-            return table.ToStringAlternative();
+            return table.ToString();
         }
     }
 

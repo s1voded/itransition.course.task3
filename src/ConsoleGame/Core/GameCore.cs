@@ -59,15 +59,15 @@ namespace ConsoleGame.Core
             _messageWriterService.Write("Enter your move: ");
 
             var user_input = Console.ReadLine();
-            if (int.TryParse(user_input, out int moveInt))
+            if (int.TryParse(user_input, out int input_int))
             {
-                switch (moveInt)
+                switch (input_int)
                 {
                     case 0://exit
                         Environment.Exit(0);
                         break;
-                    case > 0 when moveInt <= GameMoves?.Length://user move
-                        var user_move = GameMoves[moveInt - 1];
+                    case > 0 when input_int <= GameMoves?.Length://user move
+                        var user_move = GameMoves[input_int - 1];
                         return user_move;
                     default:
                         _messageWriterService.Write("Please enter correct data:");

@@ -49,39 +49,38 @@ namespace ConsoleGame.Service
         {
             GameRules = new Dictionary<string, Dictionary<string, object>>();
             GameArgs = gameArgs;
+            var countWinsAndLoses = gameArgs.Length / 2;
 
             foreach (var arg in gameArgs)
             {
-                var ruleForOneMove = GetRulesForOneMove(arg, gameArgs);
+                var ruleForOneMove = GetRulesForOneMove(arg, gameArgs, countWinsAndLoses);
                 GameRules.Add(arg, ruleForOneMove);
             }
 
             return GameRules;
         }
 
-        private Dictionary<string, object> GetRulesForOneMove(string move, string[] allMoves)
+        private Dictionary<string, object> GetRulesForOneMove(string move, string[] allMoves, int countWinsAndLoses)
         {
             var moveRules = new Dictionary<string, object>();
-            var countWinsAndLoses = allMoves.Length / 2;
 
             foreach (var m in allMoves)
             {
-                var battleResult = Array.IndexOf(allMoves, m) - Array.IndexOf(allMoves, move);
-                var battleResultString = "Draw";
-                if (battleResult > 0)
+                //discord hint: Math.sign((a - b + p + n) % n - p); where a и b — move indiсes, n — moves number, p — is Math.floor(n / 2) or (n >> 1):
+                var battleResult = Math.Sign((Array.IndexOf(allMoves, m) - Array.IndexOf(allMoves, move) + countWinsAndLoses + allMoves.Length) % allMoves.Length - countWinsAndLoses);
+                switch (battleResult)
                 {
-                    if (battleResult <= countWinsAndLoses) battleResultString = "Win";
-                    else battleResultString = "Lose";
+                    case 0:
+                        moveRules.Add(m, "Draw");
+                        break;
+                    case 1:
+                        moveRules.Add(m, "Win");
+                        break;
+                    case -1:
+                        moveRules.Add(m, "Lose");
+                        break;
                 }
-                if (battleResult < 0)
-                {
-                    if (Math.Abs(battleResult) <= countWinsAndLoses) battleResultString = "Lose";
-                    else battleResultString = "Win";
-                }
-
-                moveRules.Add(m, battleResultString);
             }
-
             return moveRules;
         }
 
